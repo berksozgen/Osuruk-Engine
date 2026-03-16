@@ -1,0 +1,21 @@
+# Build klasörleri
+cmake-build-*/
+build/
+out/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# CLion
+.idea/
+cmake-build-debug/
+cmake-build-release/
+
+# XCode (kullanmıyorsunuz ama)
+*.xcodeproj/
+*.xcworkspace/
+
+# ImGui config
+imgui.ini
