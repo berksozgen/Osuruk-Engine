@@ -20,7 +20,9 @@ find_package(OpenGL REQUIRED)
 
 include_directories(OsurukEngine)
 include_directories(OsurukEngine/Engine)
+include_directories(OsurukEngine/Tests)
 include_directories(ThirdParty/imgui)
+include_directories(ThirdParty/stb)
 
 # ----------------------------------------
 # 1️⃣ GLEW (statik, kendi kaynak dosyasından)
@@ -46,33 +48,34 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty)
 
 file(GLOB ENGINE_SOURCES OsurukEngine/Engine/*.cpp)
 file(GLOB IMGUI_SOURCES ThirdParty/imgui/*.cpp)
+file(GLOB TEXT_SOURCES OsurukEngine/Tests/*.cpp)
 
 # ----------------------------------------
 # 4️⃣ Uygulama kaynakları
 # ----------------------------------------
 if(APPLE)
     add_executable(OsurukEngine MACOSX_BUNDLE
-            OsurukEngine/main.cpp
+            OsurukEngine/OsurukEngine_Main.cpp
             ThirdParty/GLEW/glew.c
             ${ENGINE_SOURCES}
             ${IMGUI_SOURCES}
-            ${BULLET_SOURCES}
+            ${TEXT_SOURCES}
     )
 elseif(WIN32)
     add_executable(OsurukEngine WIN32
-            OsurukEngine/main.cpp
+            OsurukEngine/OsurukEngine_Main.cpp
             ThirdParty/GLEW/glew.c
             ${ENGINE_SOURCES}
             ${IMGUI_SOURCES}
-            ${BULLET_SOURCES}
+            ${TEXT_SOURCES}
     )
 else()
     add_executable(OsurukEngine
-            OsurukEngine/main.cpp
+            OsurukEngine/OsurukEngine_Main.cpp
             ThirdParty/GLEW/glew.c
             ${ENGINE_SOURCES}
             ${IMGUI_SOURCES}
-            ${BULLET_SOURCES}
+            ${TEXT_SOURCES}
     )
 endif()
 

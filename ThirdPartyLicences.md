@@ -49,7 +49,7 @@ Each library retains its original license. Below is a list of the included compo
 ## STB (Single-file public domain libraries)
 - **License:** MIT License
 - **Source:** https://github.com/nothings/stb
-- **Notes:** Original license text is included in `ThirdParty/stb_licence.txt`.
+- **Notes:** Original license text is included in `ThirdParty/stb/stb_licence.txt`.
 
 ---
 
