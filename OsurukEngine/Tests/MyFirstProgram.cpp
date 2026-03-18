@@ -122,6 +122,8 @@ namespace Test
 
     void MyFirstProgram::OnUpdate(float deltaTime)
     {
+        parseDeltaTimeToImgui = deltaTime;
+
         //renderer.Clear();
         renderer.ClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
         //ImGui_ImplOpenGL3_NewFrame(); //bunlar da adamin imgui kodu

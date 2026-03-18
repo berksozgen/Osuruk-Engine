@@ -9,7 +9,6 @@
 #include <sstream> //string stream
 
 #include "CommonValues.h"
-#include "MyFirstProgram.h"
 
 //GLEW -> Bunu kullanma sebebimiz ornek olarak Windows tarafinda OpenGL 1.1'e kadar destek var, kalani icin OpenGL'i ekran karti ureticileri kendi implemente ediyor fonksiyonlari ve o fonksiyonlari
 //cagirmak icin bunlarin (surumune gore de degisiyor) dll'lerinden fonksiyon pointerlarinin yerini bulup compile edip durmamiz gerekiyor. acikcasi tam enayi isi
@@ -21,10 +20,8 @@
 //GLFW -> Bunu kullanma sebebimiz sadece pencere acmak, her platformun kendi API'i farkli, ugrasmaya gerek yok; bu arada kodda ilk bu calisiyor ama GLEW'i yukarida cagiriyoruz, baglama ile ilgili tamamen
 #include <GLFW/glfw3.h>
 
-//GLM -> Matrix matematik kutuphanesi
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-//#include <glm/gtc/type_ptr.hpp>
+//GLM -> Matrix matematik kutuphanesi -> Mainde ihtiyacimiz kalmadi
+
 
 //imgui -> DearImgui
 #include "imgui/imgui.h"
@@ -32,21 +29,10 @@
 #include "imgui/imgui_impl_opengl3.h"
 
 #include "Engine/Renderer.h"
-
-#include "Engine/VertexBuffer.h"
-#include "Engine/VertexBufferLayout.h"
-#include "Engine/IndexBuffer.h"
-#include "Engine/VertexArray.h"
-#include "Engine/Shader.h"
-#include "Engine/Texture.h"
+#include "MyFirstProgram.h"
 
 
-
-float deltaTime = 1.0f;
-float lastTime = 0.0f;
-
-Test::MyFirstProgram test = Test::MyFirstProgram();
-
+Test::MyFirstProgram* test;
 
 void DrawImGUIHud()
 {
@@ -54,11 +40,14 @@ void DrawImGUIHud()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    test.OnImGuiRender();
+    test->OnImGuiRender();
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
+
+float deltaTime = 1.0f;
+float lastTime = 0.0f;
 
 int CreateWindowOpenGL()
 {
@@ -107,6 +96,7 @@ int CreateWindowOpenGL()
     GLCall(glEnable(GL_BLEND)); //bende bunlari yazmadan calisiyordu alpha kanalinin buglu olmamasi
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)); //bende bunlari yazmadan calisiyordu alpha kanalinin buglu olmamasi
 
+    test = new Test::MyFirstProgram();
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -118,8 +108,8 @@ int CreateWindowOpenGL()
         /* Render here */
         //renderer.Clear();
 
-        test.OnUpdate(deltaTime);
-        test.OnRender();
+        test->OnUpdate(deltaTime);
+        test->OnRender();
 
         DrawImGUIHud();
 
@@ -129,6 +119,8 @@ int CreateWindowOpenGL()
         /* Poll for and process events */
         glfwPollEvents();
     }
+    // LOOP BİTER
+    delete test;  // ✅ OpenGL context HALA AKTİF
 
     glfwTerminate();
 
