@@ -65,12 +65,11 @@ namespace Test
     static int ObjectCount = 1;
 
     bool useRgb = true;
-    bool showDemoWindow = false;
 
     ImVec4 clearColor = ImVec4(0.05f, 0.0f, 0.0f, 1.00f);
     //imgui degiskenleri
 
-    MyFirstProgram::MyFirstProgram()
+    MyFirstProgram::MyFirstProgram() : parseDeltaTimeToImgui(0)
     {
         va = new VertexArray();
         vb = new VertexBuffer(positions, 4 * 4 * sizeof(float));
@@ -90,7 +89,8 @@ namespace Test
         shader->SetUniform4f("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
 
         model = glm::translate(model, glm::vec3(1.5f, -0.5f, 0.0f));
-        glm::mat4 m_ModelViewProjection = proj * view * model; //DirectX ile OpenGL birbirine transpose matrix kullaniyor, orada siralama tam tersi.
+        glm::mat4 m_ModelViewProjection = proj * view * model;
+        //DirectX ile OpenGL birbirine transpose matrix kullaniyor, orada siralama tam tersi.
         shader->SetUniformMat4f("u_MVP", m_ModelViewProjection);
 
         texture->Bind();
@@ -195,7 +195,7 @@ namespace Test
         {
             static float f = 0.0f;
             //ImGui::Begin("Hello, world!");
-            ImGui::Text("This is some useful text.");
+            //ImGui::Text("This is some useful text.");
             //ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
             //ImGui::SliderFloat("Horizontal", &translationA.x, -widthToHeightRatio, widthToHeightRatio);
             //ImGui::SliderFloat("Vertical", &translationA.y, -1.0f, 1.0f);
@@ -209,7 +209,6 @@ namespace Test
             ImGui::ColorEdit3("clear color", (float*)&clearColor);
 
             ImGui::Checkbox("Use RGB", &useRgb);
-            ImGui::Checkbox("Demo Window", &showDemoWindow);
 
             if (ImGui::Button("Add"))
             {

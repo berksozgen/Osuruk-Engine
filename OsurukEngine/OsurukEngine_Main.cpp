@@ -8,8 +8,6 @@
 #include <string> //get line string kutuphanesi diyoda eklemedim ben calsiiyo valla
 #include <sstream> //string stream
 
-#include "CommonValues.h"
-
 //GLEW -> Bunu kullanma sebebimiz ornek olarak Windows tarafinda OpenGL 1.1'e kadar destek var, kalani icin OpenGL'i ekran karti ureticileri kendi implemente ediyor fonksiyonlari ve o fonksiyonlari
 //cagirmak icin bunlarin (surumune gore de degisiyor) dll'lerinden fonksiyon pointerlarinin yerini bulup compile edip durmamiz gerekiyor. acikcasi tam enayi isi
 #ifndef GLEW_STATIC
@@ -22,17 +20,18 @@
 
 //GLM -> Matrix matematik kutuphanesi -> Mainde ihtiyacimiz kalmadi
 
-
 //imgui -> DearImgui
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
+#include "CommonValues.h"
+
 #include "Engine/Renderer.h"
 #include "MyFirstProgram.h"
+#include "TestClearColor.h"
 
-
-Test::MyFirstProgram* test;
+Test::Test* currentTest;
 
 void DrawImGUIHud()
 {
@@ -40,7 +39,16 @@ void DrawImGUIHud()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    test->OnImGuiRender();
+    if (currentTest)
+    {
+        currentTest->OnImGuiRender();
+    }
+    else
+    {
+        ImGui::Begin("Test Object Not Valid!");
+        //ImGui::Text("Test Object Not Valid!");
+        ImGui::End();
+    }
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -96,7 +104,12 @@ int CreateWindowOpenGL()
     GLCall(glEnable(GL_BLEND)); //bende bunlari yazmadan calisiyordu alpha kanalinin buglu olmamasi
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)); //bende bunlari yazmadan calisiyordu alpha kanalinin buglu olmamasi
 
-    test = new Test::MyFirstProgram();
+    Test::TestMenu* testMenu = new Test::TestMenu(currentTest);
+    currentTest = testMenu;
+    //currentTest = new Test::MyFirstProgram();
+
+    testMenu->RegisterTest<Test::TestClearColor>("Clear Color");
+    testMenu->RegisterTest<Test::MyFirstProgram>("My First Program");
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -107,11 +120,33 @@ int CreateWindowOpenGL()
 
         /* Render here */
         //renderer.Clear();
+        glClear(GL_COLOR_BUFFER_BIT); //default testte olmuyordu bu, ama bunu cagircagimiz seyini de cagristiriyor bir nevi bende
 
-        test->OnUpdate(deltaTime);
-        test->OnRender();
+        //bunlari adamin koda sabit kalmak icin ekliyorum
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+        //bunlari adamin koda sabit kalmak icin ekliyorum
 
-        DrawImGUIHud();
+        if (currentTest)
+        {
+            currentTest->OnUpdate(deltaTime);
+            currentTest->OnRender();
+            ImGui::Begin("Test");
+            if (currentTest != testMenu && ImGui::Button("<-"))
+            {
+                delete currentTest;
+                currentTest = testMenu;
+            }
+            currentTest->OnImGuiRender();
+            ImGui::End();
+        }
+
+        //DrawImGUIHud(); //bunu da ondan cikartiyorum
+        //bunlari adamin koda sabit kalmak icin ekliyorum
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        //bunlari adamin koda sabit kalmak icin ekliyorum
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
@@ -120,7 +155,10 @@ int CreateWindowOpenGL()
         glfwPollEvents();
     }
     // LOOP BİTER
-    delete test;  // ✅ OpenGL context HALA AKTİF
+    delete currentTest;  // ✅ OpenGL context HALA AKTİF
+
+    if (currentTest != testMenu) //iki kere silmiyelim bunu diye
+        delete testMenu;
 
     glfwTerminate();
 
