@@ -8,6 +8,8 @@
 #include <string> //get line string kutuphanesi diyoda eklemedim ben calsiiyo valla
 #include <sstream> //string stream
 
+#include "TestTexture2D.h"
+
 //GLEW -> Bunu kullanma sebebimiz ornek olarak Windows tarafinda OpenGL 1.1'e kadar destek var, kalani icin OpenGL'i ekran karti ureticileri kendi implemente ediyor fonksiyonlari ve o fonksiyonlari
 //cagirmak icin bunlarin (surumune gore de degisiyor) dll'lerinden fonksiyon pointerlarinin yerini bulup compile edip durmamiz gerekiyor. acikcasi tam enayi isi
 #ifndef GLEW_STATIC
@@ -109,6 +111,7 @@ int CreateWindowOpenGL()
     //currentTest = new Test::MyFirstProgram();
 
     testMenu->RegisterTest<Test::TestClearColor>("Clear Color");
+    testMenu->RegisterTest<Test::TestTexture2D>("Texture 2D");
     testMenu->RegisterTest<Test::MyFirstProgram>("My First Program");
 
     /* Loop until the user closes the window */
