@@ -8,6 +8,7 @@
 #include <string> //get line string kutuphanesi diyoda eklemedim ben calsiiyo valla
 #include <sstream> //string stream
 
+#include "TestRender3D.h"
 #include "TestTexture2D.h"
 
 //GLEW -> Bunu kullanma sebebimiz ornek olarak Windows tarafinda OpenGL 1.1'e kadar destek var, kalani icin OpenGL'i ekran karti ureticileri kendi implemente ediyor fonksiyonlari ve o fonksiyonlari
@@ -113,6 +114,7 @@ int CreateWindowOpenGL()
     testMenu->RegisterTest<Test::TestClearColor>("Clear Color");
     testMenu->RegisterTest<Test::TestTexture2D>("Texture 2D");
     testMenu->RegisterTest<Test::MyFirstProgram>("My First Program");
+    testMenu->RegisterTest<Test::TestRender3D>("3D Test");
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
